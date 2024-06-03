@@ -1,6 +1,6 @@
 import DatabaseService from "@/infra/DatabaseService";
 
-export default class ListDoctorUseCses {
+export default class ListDoctorUseCases {
     
     constructor(readonly database: DatabaseService){}
     
