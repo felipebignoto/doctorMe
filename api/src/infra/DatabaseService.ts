@@ -8,7 +8,7 @@ export default class DatabaseService {
     return this.connection.doctor.findMany();
   }
 
-  getDoctorById(id: number, includeAgenda: boolean) {
+  getDoctorById(id: number, includeAgenda: boolean = false) {
     return this.connection.doctor.findUnique({
       where: { id },
       include: {
@@ -17,13 +17,32 @@ export default class DatabaseService {
     });
   }
 
-  getPatienteByPhone(phone: string, includeAppoinmet: boolean) {
+  getPatienteByPhone(phone: string, includeAppoinmet: boolean = false) {
     return this.connection.patient.findUnique({
       where: { phone },
       include: {
         appointment: includeAppoinmet,
       },
     });
+  }
+
+  createUser(phone: string, password: string){
+    return this.connection.user.create({
+      data: {
+        phone,
+        password,
+      }
+    })
+  }
+
+  createPatiente(name: string, phone: string, userId: number){
+    return this.connection.patient.create({
+      data: {
+        name,
+        phone,
+        userId
+      }
+    })
   }
 }
 
