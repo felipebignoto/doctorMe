@@ -5,7 +5,11 @@ export default class DatabaseService {
 
   listDoctor() {
     //Lógica de acesso a banco de dados
-    return this.connection.doctor.findMany();
+    return this.connection.doctor.findMany({
+      include: {
+        agenda: true
+      }
+    });
   }
 
   getDoctorById(id: number, includeAgenda: boolean = false) {
@@ -26,23 +30,58 @@ export default class DatabaseService {
     });
   }
 
-  createUser(phone: string, password: string){
+  createUser(phone: string, password: string) {
     return this.connection.user.create({
       data: {
         phone,
         password,
-      }
-    })
+      },
+    });
+  }
+  
+  getUserByPhone(phone: string) {
+    return this.connection.user.findUnique({
+      where: { phone },
+    });
   }
 
-  createPatiente(name: string, phone: string, userId: number){
+  createPatiente(name: string, phone: string, userId: number) {
     return this.connection.patient.create({
       data: {
         name,
         phone,
-        userId
-      }
-    })
+        userId,
+      },
+    });
+  }
+
+  getPatientById(id: number) {
+    return this.connection.patient.findUnique({
+      where: { id },
+    });
+  }
+
+  getAgendaById(id: number) {
+    return this.connection.agenda.findUnique({
+      where: { id },
+    });
+  }
+
+  updateAgenda(id: number, data: { available: boolean }) {
+    return this.connection.agenda.update({
+      where: { id },
+      data,
+    });
+  }
+
+  createAppointment(patientId: number, doctorId: number, date: Date) {
+    return this.connection.appointment.create({
+      data: {
+        patientId,
+        doctorId,
+        date,
+      },
+    });
   }
 }
 
