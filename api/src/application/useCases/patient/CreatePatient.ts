@@ -1,4 +1,5 @@
 import DatabaseService, { database } from "@/infra/DatabaseService";
+import { BussinesError } from "@/infra/helpers/Errors";
 import { hashPassword } from "@/infra/helpers/SecurityHelper";
 export default class CreatePatientUseCase {
     constructor(readonly database: DatabaseService){}
@@ -7,7 +8,7 @@ export default class CreatePatientUseCase {
         // verificar se ja existe o paciente
         const patient = await database.getPatienteByPhone(phone);
         if(patient){
-            throw new Error("Patient already exists")
+            throw new BussinesError("Patient already exists")
         }
 
         // gera uma hash para a senha

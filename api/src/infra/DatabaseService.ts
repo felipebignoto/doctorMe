@@ -7,8 +7,8 @@ export default class DatabaseService {
     //Lógica de acesso a banco de dados
     return this.connection.doctor.findMany({
       include: {
-        agenda: true
-      }
+        agenda: true,
+      },
     });
   }
 
@@ -21,11 +21,19 @@ export default class DatabaseService {
     });
   }
 
-  getPatienteByPhone(phone: string, includeAppoinmet: boolean = false) {
+  getPatienteByPhone(
+    phone: string,
+    includeAppoinmet: boolean = false,
+    includeDoctor: boolean = false
+  ) {
     return this.connection.patient.findUnique({
       where: { phone },
       include: {
-        appointment: includeAppoinmet,
+        appointment: !includeAppoinmet ? false : {
+          include: {
+            doctor: includeDoctor
+          }
+        }
       },
     });
   }
@@ -38,7 +46,7 @@ export default class DatabaseService {
       },
     });
   }
-  
+
   getUserByPhone(phone: string) {
     return this.connection.user.findUnique({
       where: { phone },

@@ -2,6 +2,7 @@ import DoctorController from "@/application/controller/DoctorController";
 import ListDoctorUseCases from "@/application/useCases/doctor/ListDoctor";
 import { Response, Request } from "express";
 import { database } from "../DatabaseService";
+import GetDoctorById from "@/application/useCases/doctor/GetDoctorById";
 
 export default class DoctorControllerImpl implements DoctorController {
     async listDoctor(req: Request, res: Response){
@@ -9,6 +10,13 @@ export default class DoctorControllerImpl implements DoctorController {
       const doctors = await useCase.execute();
 
       res.status(200).json(doctors);
+    }
+
+    async getDoctorById(req: Request, res: Response){
+      const useCase = new GetDoctorById(database)
+      const doctor = await useCase.execute(Number(req.params.id));
+
+      res.status(200).json(doctor);
     }
 }
 
